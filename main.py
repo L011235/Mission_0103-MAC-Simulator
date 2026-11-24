@@ -693,7 +693,7 @@ def flatten(m: Matrix) -> Flat:
     # TODO 2) 1차원 리스트를 return 한다.
     #
     # [검색 키워드] python 2차원 리스트 1차원으로 펼치기, python 리스트 extend
-    pass
+
 
 
 def mac_flat(pattern: Flat, filt: Flat) -> float:
@@ -729,11 +729,6 @@ def compare_2d_1d(sizes: List[int]) -> List[Tuple[int, float, float]]:
 
         if abs(mac_score_2d - mac_score_1d) > 1e-6:
             print(f"경고: N={N}에서 2D와 1D 점수가 다릅니다. 2D={mac_score_2d:.6f}, 1D={mac_score_1d:.6f}")
-        else:
-            print(f"N={N}에서 2D와 1D 점수 일치. 2D={mac_score_2d:.6f}, 1D={mac_score_1d:.6f}")
-        if avg_ms_1d != 0:       
-            print(f"N={N} 2D={avg_ms_2d:.6f}ms, 1D={avg_ms_1d:.6f}ms 2D/1D = {avg_ms_2d/avg_ms_1d:.2f}배")
-
     return rows
 
 
@@ -746,14 +741,14 @@ def compare_2d_1d(sizes: List[int]) -> List[Tuple[int, float, float]]:
     # (생각해 볼 것) 파이썬에서는 1D 가 항상 빠를까? 직접 재 보고 결과를 그대로 적자.
     #
     # [검색 키워드] python 성능 비교 측정, python 캐시 지역성 (참고용)
-    pass
+
 
 
 # ===========================================================================
 # 6. 프로그램 시작점
 # ===========================================================================
 def select_mode() -> int:
-    """모드를 입력받아 1 또는 2 를 돌려준다. 잘못 입력하면 다시 묻는다."""
+    """모드를 입력받아 0,1,2,3 중 하나를 돌려준다. 잘못 입력하면 다시 묻는다."""
     print("=== Mini NPU Simulator ===")
     print("[모드 선택]")
     print("1. 사용자 입력 (3x3)")
@@ -775,7 +770,7 @@ def select_mode() -> int:
     # TODO 3) "1" 또는 "2" 이면 int 로 바꿔 return, 아니면 안내 후 다시 묻는다.
     #
     # [검색 키워드] python while 입력 검증, python input strip
-    pass
+
 
 
 def main() -> None:
@@ -788,6 +783,11 @@ def main() -> None:
     elif mode == 3:
         sizes = [3, 5, 13, 25]
         rows = compare_2d_1d(sizes)
+        print("\n=== 2D vs 1D 성능 비교 ===")
+        print(f"{'크기(N×N)':<8}{'2D 평균(ms)':>14}{'1D 평균(ms)':>14}{'2D/1D':>9}")
+        for n, ms2d, ms1d in rows:
+            ratio = ms2d / ms1d if ms1d else 0.0
+            print(f"{n}×{n}".ljust(8) + f"{ms2d:.6f}".rjust(14) + f"{ms1d:.6f}".rjust(14) + f"{ratio:.2f}배".rjust(9))
     elif mode == 0:
         print("프로그램을 종료합니다.")
         return
